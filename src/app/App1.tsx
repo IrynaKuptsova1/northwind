@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
-
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
-
 import "./App.css";
 
 type Column<T> = {
@@ -34,6 +32,7 @@ type Product = {
 const productConfig: EntityConfig<Product> = {
   title: "Products",
   endpoint: "/products",
+
   columns: [
     {
       id: "name",
@@ -170,6 +169,28 @@ function EntityPage<T>({ config }: { config: EntityConfig<T> }) {
   );
 }
 
+function Home() {
+  return <div className="placeholder-page">Home</div>;
+}
+
+function Dashboard() {
+  return <div className="placeholder-page">Dashboard</div>;
+}
+
+function Search() {
+  return <div className="placeholder-page">Search</div>;
+}
+
+function PlaceholderEntity({ title }: { title: string }) {
+  return (
+    <section className="entity-page">
+      <div className="entity-header">
+        <h1>{title}</h1>
+      </div>
+    </section>
+  );
+}
+
 function Layout() {
   const [isLinksOpen, setIsLinksOpen] = useState(false);
 
@@ -200,74 +221,49 @@ function Layout() {
         <div className="sidebar-section">
           <div className="sidebar-section-title">General</div>
 
-          {/*
-          <Link
-            to="/"
-            className="sidebar-link"
-          >
+          <Link to="/" className="sidebar-link">
             Home
           </Link>
 
-          <Link
-            to="/dashboard"
-            className="sidebar-link"
-          >
+          <Link to="/dashboard" className="sidebar-link">
             Dashboard
           </Link>
-          */}
         </div>
 
         <div className="sidebar-section">
-          <div className="sidebar-section-title">Backoffice</div>
-
-          {/*
-          <Link
-            to="/suppliers"
-            className="sidebar-link"
-          >
+          <Link to="/suppliers" className="sidebar-link">
             Suppliers
           </Link>
-          */}
 
-          <Link to="/products" className="sidebar-link active">
+          <Link to="/products" className="sidebar-link">
             Products
           </Link>
 
-          {/*
-          <Link
-            to="/orders"
-            className="sidebar-link"
-          >
+          <Link to="/orders" className="sidebar-link">
             Orders
           </Link>
 
-          <Link
-            to="/employees"
-            className="sidebar-link"
-          >
+          <Link to="/employees" className="sidebar-link">
             Employees
           </Link>
 
-          <Link
-            to="/customers"
-            className="sidebar-link"
-          >
+          <Link to="/customers" className="sidebar-link">
             Customers
           </Link>
 
-          <Link
-            to="/search"
-            className="sidebar-link"
-          >
+          <Link to="/search" className="sidebar-link">
             Search
           </Link>
-          */}
         </div>
       </aside>
 
       <main className="main-content">
         <header className="top-header">
-          <div className="header-time">{new Date().toLocaleTimeString()}</div>
+          <button type="button" className="menu-button" aria-label="Open menu">
+            ☰
+          </button>
+
+          <div className="header-time">{/* Reserved for time */}</div>
 
           <div className="sqlite-links" ref={linksRef}>
             <button
@@ -275,43 +271,34 @@ function Layout() {
               className="sqlite-links-button"
               onClick={() => setIsLinksOpen((value) => !value)}
             >
-              <span className="material-icons">menu</span>
-
-              <span>SQLite Links</span>
-
-              <span className="material-icons">keyboard_arrow_down</span>
+              SQLite Links
+              <span>⌄</span>
             </button>
 
             {isLinksOpen && (
               <div className="sqlite-links-menu">
                 <a
-                  href="https://blog.cloudflare.com/d1-turning-it-up-to-11/"
+                  href="https://blog.cloudflare.com/reintroducing-d1/"
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <span className="material-icons">link</span>
-
-                  <span>Reintroducing D1</span>
+                  Reintroducing D1
                 </a>
 
                 <a
-                  href="https://www.sqlite.org/lang.html"
+                  href="https://developers.cloudflare.com/d1/reference/sql-statements/"
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <span className="material-icons">link</span>
-
-                  <span>SQLite SQL Flavour</span>
+                  SQLite SQL Flavour
                 </a>
 
                 <a
-                  href="https://developers.cloudflare.com/workers/learning/using-durable-objects/"
+                  href="https://developers.cloudflare.com/durable-objects/"
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <span className="material-icons">link</span>
-
-                  <span>Durable Objects</span>
+                  Durable Objects
                 </a>
               </div>
             )}
@@ -319,9 +306,35 @@ function Layout() {
         </header>
 
         <Routes>
+          <Route path="/" element={<Home />} />
+
+          <Route path="/dashboard" element={<Dashboard />} />
+
+          <Route path="/search" element={<Search />} />
+
           <Route
             path="/products"
             element={<EntityPage config={productConfig} />}
+          />
+
+          <Route
+            path="/suppliers"
+            element={<PlaceholderEntity title="Suppliers" />}
+          />
+
+          <Route
+            path="/orders"
+            element={<PlaceholderEntity title="Orders" />}
+          />
+
+          <Route
+            path="/employees"
+            element={<PlaceholderEntity title="Employees" />}
+          />
+
+          <Route
+            path="/customers"
+            element={<PlaceholderEntity title="Customers" />}
           />
         </Routes>
       </main>

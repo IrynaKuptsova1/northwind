@@ -13,7 +13,8 @@
     "drizzle-orm": "^0.45.3",
     "hono": "^4.13.8",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.4"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.58.0",
