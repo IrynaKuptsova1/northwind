@@ -8,7 +8,7 @@ const app = new Hono<{ Bindings: Env }>();
 
 app.use("*", cors());
 
-app.get("/products.data", async (c) => {
+app.get("/products", async (c) => {
   const limit = Number(c.req.query("limit") ?? 20);
   const offset = Number(c.req.query("offset") ?? 0);
 
