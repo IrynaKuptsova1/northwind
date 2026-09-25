@@ -130,14 +130,14 @@ function EntityPage<T>({ config }: { config: EntityConfig<T> }) {
       <div className="entity-header">
         <h1>{config.title}</h1>
 
-        <button
+        {/* <button
           type="button"
           className="refresh-button"
           onClick={() => window.location.reload()}
           aria-label={`Refresh ${config.title}`}
         >
           ↻
-        </button>
+        </button>*/}
       </div>
 
       <div className="entity-card">
@@ -198,7 +198,6 @@ function Layout() {
         <div className="sidebar-title">Northwind Traders</div>
 
         <div className="sidebar-section">
-          <div className="sidebar-section-title">General</div>
 
           {/*
           <Link
@@ -218,7 +217,6 @@ function Layout() {
         </div>
 
         <div className="sidebar-section">
-          <div className="sidebar-section-title">Backoffice</div>
 
           {/*
           <Link
@@ -267,7 +265,7 @@ function Layout() {
 
       <main className="main-content">
         <header className="top-header">
-          <div className="header-time">{new Date().toLocaleTimeString()}</div>
+          {/* <div className="header-time">{new Date().toLocaleTimeString()}</div> */}
 
           <div className="sqlite-links" ref={linksRef}>
             <button
