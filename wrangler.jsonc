@@ -1,14 +1,18 @@
 {
-	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "northwind",
-	"compatibility_date": "2026-09-23",
-	"d1_databases": [
-		{
-			"binding": "DB",
-			"database_name": "northwindDb",
-			"database_id": "2277b7b9-643f-40d9-8045-de376e5b0e2a",
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "northwind",
+  "main": "./src/server/index.ts",
+  "compatibility_date": "2026-09-23",
+  "assets": {
+    "not_found_handling": "single-page-application"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "northwindDb",
+      "database_id": "2277b7b9-643f-40d9-8045-de376e5b0e2a",
       "migrations_dir": "drizzle",
-			"remote": true
-		},
-	],
+      "remote": true
+    }
+  ]
 }
