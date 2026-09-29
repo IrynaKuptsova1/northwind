@@ -3,10 +3,15 @@ import { cors } from "hono/cors";
 
 import { getProducts } from "./db/query";
 import type { Env } from "./db/database";
+import { json } from "drizzle-orm/gel-core";
 
 const app = new Hono<{ Bindings: Env }>();
 
 app.use("*", cors());
+
+app.get("/health", async (c) => {
+  return c.json("ok");
+});
 
 app.get("/products", async (c) => {
   const limit = Number(c.req.query("limit") ?? 20);
