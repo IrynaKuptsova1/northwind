@@ -3,14 +3,19 @@
   "type": "module",
   "scripts": {
     "dev": "wrangler dev",
+    "test-queries": "wrangler dev src/test.ts & sleep 2 && curl http://localhost:8787",
     "deploy": "wrangler deploy --minify",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings"
   },
   "dependencies": {
+    "@cloudflare/workers-types": "^5.20261001.1",
     "drizzle-orm": "^0.45.3",
     "hono": "^4.13.11"
   },
   "devDependencies": {
+    "@types/bun": "^1.4.2",
+    "@types/node": "^26.6.4",
+    "drizzle-kit": "^0.31.11",
     "wrangler": "^4.110.0"
   }
 }

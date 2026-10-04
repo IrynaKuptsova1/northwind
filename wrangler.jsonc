@@ -8,7 +8,6 @@
       "binding": "DB",
       "database_name": "northwindDb",
       "database_id": "2277b7b9-643f-40d9-8045-de376e5b0e2a",
-      "migrations_dir": "drizzle",
       "remote": true,
     },
   ],

@@ -5,8 +5,20 @@ import { products } from "./schema";
 export async function getProducts(env: Env, limit: number, offset: number) {
   const db = getDb(env);
 
-  const [{ total }] = await db.select({ total: count() }).from(products);
-  const data = await db.select().from(products).limit(limit).offset(offset);
+  const data = await db
+    .select({
+      total: count(),
+      productId: products.productId,
+    })
+    .from(products)
+    .limit(limit)
+    .offset(offset);
 
-  return { total, data };
+  return { data };
 }
+
+// export async function getTotal(env:Env) {
+//   const db = getDb(env);
+//   const
+
+// }
