@@ -3,7 +3,6 @@
   "type": "module",
   "scripts": {
     "dev": "wrangler dev",
-    "test-queries": "wrangler dev src/test.ts & sleep 2 && curl http://localhost:8787",
     "deploy": "wrangler deploy --minify",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings"
   },

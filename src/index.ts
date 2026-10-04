@@ -1,9 +1,11 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 
-import { getProducts } from "./db/query";
-import type { Env } from "./db/database";
+import { D1Database } from "@cloudflare/workers-types";
 import dataRoutes from "./data";
+export type Env = {
+  DB: D1Database;
+};
 
 const app = new Hono<{ Bindings: Env }>();
 

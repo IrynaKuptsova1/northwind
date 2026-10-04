@@ -1,9 +1,11 @@
 import { count } from "drizzle-orm";
-import { getDb, type Env } from "./database";
+
+import { DrizzleD1Database } from "drizzle-orm/d1";
 import { products } from "./schema";
 
-export async function getProducts(env: Env, limit: number, offset: number) {
-  const db = getDb(env);
+export async function getProducts(db: DrizzleD1Database
+  , limit: number, offset: number) {
+
 
   const data = await db
     .select({
