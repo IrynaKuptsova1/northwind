@@ -28,6 +28,7 @@ export async function getSuppliers(
 
   return { result };
 }
+
 export async function getProducts(
   db: DrizzleD1Database,
   limit: number,
@@ -35,10 +36,12 @@ export async function getProducts(
 ) {
   const result = await db
     .select({
+      productId: products.productId,
       productName: products.productName,
-      productsPrice: products.unitPrice,
-      productsStock: products.unitsInStock,
-      productsOrder: products.unitsOnOrder,
+      quantityPerUnit: products.quantityPerUnit,
+      unitPrice: products.unitPrice,
+      unitsInStock: products.unitsInStock,
+      unitsOnOrder: products.unitsOnOrder,
       total: db.$count(products),
     })
     .from(products)
@@ -115,4 +118,48 @@ export async function getCustomers(
     .offset(offset);
 
   return { result };
+}
+export async function getProductById(db: DrizzleD1Database, productId: number) {
+  const result = await db
+    .select({
+      productId: products.productId,
+      productName: products.productName,
+      supplierId: products.supplierId,
+      supplierName: suppliers.companyName,
+      quantityPerUnit: products.quantityPerUnit,
+      unitPrice: products.unitPrice,
+      unitsInStock: products.unitsInStock,
+      unitsOnOrder: products.unitsOnOrder,
+      reorderLevel: products.reorderLevel,
+      discontinued: products.discontinued,
+    })
+    .from(products)
+    .leftJoin(suppliers, eq(products.supplierId, suppliers.supplierId))
+    .where(eq(products.productId, productId))
+    .limit(1);
+
+  return result[0] ?? null;
+}
+export async function getSupplierById(
+  db: DrizzleD1Database,
+  supplierId: number,
+) {
+  const result = await db
+    .select({
+      supplierId: suppliers.supplierId,
+      companyName: suppliers.companyName,
+      contactName: suppliers.contactName,
+      contactTitle: suppliers.contactTitle,
+      address: suppliers.address,
+      city: suppliers.city,
+      region: suppliers.region,
+      postalCode: suppliers.postalCode,
+      country: suppliers.country,
+      phone: suppliers.phone,
+    })
+    .from(suppliers)
+    .where(eq(suppliers.supplierId, supplierId))
+    .limit(1);
+
+  return result[0] ?? null;
 }

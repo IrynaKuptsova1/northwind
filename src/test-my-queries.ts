@@ -9,6 +9,7 @@ import {
   getCustomers,
   getOrders,
   getEmployees,
+  getProductById,
 } from "./db/query";
 import {
   products,
@@ -34,28 +35,7 @@ try {
   //console.dir(await getSuppliers(db, 20, 0));
   //console.dir(await getCustomers(db, 20, 0));
 
-  async function getEmployees(
-    db: DrizzleD1Database,
-    limit: number,
-    offset: number,
-  ) {
-    const result = await db
-      .select({
-        name: sql<string>`${employees.firstName} || ' ' || ${employees.lastName}`,
-        title: employees.title,
-        city: employees.city,
-        phone: employees.homePhone,
-        country: employees.country,
-        total: db.$count(employees),
-      })
-      .from(employees)
-      .limit(limit)
-      .offset(offset);
-
-    return { result };
-  }
-
-  console.dir(await getEmployees(db, 100, 0));
+  console.dir(await getProductById(db, 1));
 } finally {
   await dispose();
 }
