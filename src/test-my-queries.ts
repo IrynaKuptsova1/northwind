@@ -10,6 +10,7 @@ import {
   getOrders,
   getEmployees,
   getProductById,
+  getSupplierById,
 } from "./db/query";
 import {
   products,
@@ -37,7 +38,7 @@ try {
 
   
 
-  console.dir(await getProductById(db, 1));
+  console.dir(await getSupplierById(db, 2));
 } finally {
   await dispose();
 }

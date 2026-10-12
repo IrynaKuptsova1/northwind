@@ -156,6 +156,8 @@ export async function getSupplierById(
       postalCode: suppliers.postalCode,
       country: suppliers.country,
       phone: suppliers.phone,
+      fax: suppliers.fax,
+      homePage: suppliers.homePage,
     })
     .from(suppliers)
     .where(eq(suppliers.supplierId, supplierId))
