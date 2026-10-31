@@ -11,6 +11,11 @@ const app = new Hono<{ Bindings: Env }>();
 
 app.use("*", cors());
 
+app.onError((error, c) => {
+  console.error(error);
+  return c.json({ error: "Internal server error" }, 500);
+});
+
 app.get("/health", async (c) => {
   return c.json("ok");
 });

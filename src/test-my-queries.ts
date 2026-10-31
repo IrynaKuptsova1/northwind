@@ -38,7 +38,7 @@ try {
 
   
 
-  console.dir(await getSupplierById(db, 2));
+  console.dir(await getSuppliers(db,2, 0));
 } finally {
   await dispose();
 }

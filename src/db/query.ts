@@ -15,6 +15,7 @@ export async function getSuppliers(
 ) {
   const result = await db
     .select({
+      supplierId: suppliers.supplierId,
       companyName: suppliers.companyName,
       contactName: suppliers.contactName,
       contactTitle: suppliers.contactTitle,
@@ -23,6 +24,7 @@ export async function getSuppliers(
       total: db.$count(suppliers),
     })
     .from(suppliers)
+    .orderBy(suppliers.supplierId)
     .limit(limit)
     .offset(offset);
 
@@ -45,6 +47,7 @@ export async function getProducts(
       total: db.$count(products),
     })
     .from(products)
+    .orderBy(products.productId)
     .limit(limit)
     .offset(offset);
 
@@ -59,7 +62,7 @@ export async function getOrders(
   const result = await db
     .select({
       orderId: orders.orderId,
-      totalPrice: sql<number>`
+      totalPrice: sql<number | null>`
       ROUND(SUM(${orderDetails.unitPrice} * ${orderDetails.quantity} * (1 - ${orderDetails.discount})),2)`,
       products: count(orderDetails.productId),
       quantity: sum(orderDetails.quantity),
@@ -70,8 +73,9 @@ export async function getOrders(
       total: db.$count(orders),
     })
     .from(orders)
-    .innerJoin(orderDetails, eq(orderDetails.orderId, orders.orderId))
+    .leftJoin(orderDetails, eq(orderDetails.orderId, orders.orderId))
     .groupBy(orders.orderId)
+    .orderBy(orders.orderId)
     .limit(limit)
     .offset(offset);
 
@@ -85,7 +89,10 @@ export async function getEmployees(
 ) {
   const result = await db
     .select({
-      name: sql<string>`${employees.firstName} || ' ' || ${employees.lastName}`,
+      employeeId: employees.employeeId,
+      name: sql<
+        string | null
+      >`${employees.firstName} || ' ' || ${employees.lastName}`,
       title: employees.title,
       city: employees.city,
       phone: employees.homePhone,
@@ -93,6 +100,7 @@ export async function getEmployees(
       total: db.$count(employees),
     })
     .from(employees)
+    .orderBy(employees.employeeId)
     .limit(limit)
     .offset(offset);
 
@@ -106,6 +114,7 @@ export async function getCustomers(
 ) {
   const result = await db
     .select({
+      customerId: customers.customerId,
       companyName: customers.companyName,
       contactName: customers.contactName,
       contactTitle: customers.contactTitle,
@@ -114,6 +123,7 @@ export async function getCustomers(
       total: db.$count(customers),
     })
     .from(customers)
+    .orderBy(customers.customerId)
     .limit(limit)
     .offset(offset);
 
@@ -164,4 +174,65 @@ export async function getSupplierById(
     .limit(1);
 
   return result[0] ?? null;
+}
+
+export async function getCustomerById(
+  db: DrizzleD1Database,
+  customerId: string,
+) {
+  const result = await db
+    .select()
+    .from(customers)
+    .where(eq(customers.customerId, customerId))
+    .limit(1);
+  return result[0] ?? null;
+}
+
+export async function getEmployeeById(
+  db: DrizzleD1Database,
+  employeeId: number,
+) {
+  const result = await db
+    .select()
+    .from(employees)
+    .where(eq(employees.employeeId, employeeId))
+    .limit(1);
+  return result[0] ?? null;
+}
+
+export async function getOrderById(db: DrizzleD1Database, orderId: number) {
+  const result = await db
+    .select()
+    .from(orders)
+    .where(eq(orders.orderId, orderId))
+    .limit(1);
+  const order = result[0];
+  if (!order) return null;
+
+  const items = await db
+    .select({
+      productId: orderDetails.productId,
+      productName: products.productName,
+      unitPrice: orderDetails.unitPrice,
+      quantity: orderDetails.quantity,
+      discount: orderDetails.discount,
+      totalPrice: sql<
+        number | null
+      >`${orderDetails.unitPrice} * ${orderDetails.quantity} * (1 - ${orderDetails.discount})`,
+    })
+    .from(orderDetails)
+    .leftJoin(products, eq(orderDetails.productId, products.productId))
+    .where(eq(orderDetails.orderId, orderId))
+    .orderBy(orderDetails.productId);
+
+  const totals = await db
+    .select({
+      totalPrice: sql<
+        number | null
+      >`ROUND(SUM(${orderDetails.unitPrice} * ${orderDetails.quantity} * (1 - ${orderDetails.discount})), 2)`,
+    })
+    .from(orderDetails)
+    .where(eq(orderDetails.orderId, orderId));
+
+  return { ...order, items, totalPrice: totals[0]?.totalPrice ?? null };
 }
